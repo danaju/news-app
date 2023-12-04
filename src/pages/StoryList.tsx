@@ -1,5 +1,5 @@
 function StoryList() {
-  return <div>Stories</div>
+  return <div>Story</div>
 }
 
 export default StoryList

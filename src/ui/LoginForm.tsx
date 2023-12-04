@@ -1,11 +1,26 @@
-import React from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
-import { TextField, Button, Paper, Typography, Container } from "@mui/material"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import ExitToAppIcon from "@mui/icons-material/ExitToApp"
+import Tooltip from "@mui/material/Tooltip"
+import LoadingButton from "@mui/lab/LoadingButton"
+import {
+  TextField,
+  Button,
+  Paper,
+  Typography,
+  Container,
+  Grid,
+} from "@mui/material"
 import { styled } from "@mui/system"
+import { useAppDispatch, useAppSelector } from "../hooks"
+import { useNavigate } from "react-router-dom"
+import { fetchNews } from "../features/news/newsSlice"
+import { setIsAuthenticated } from "../features/user/userSlice"
+import Toast from "./Toast"
 
 interface LoginFormInput {
-  username: string
-  password: string
+  email: string
+  apiKey: string
 }
 
 const CenteredContainer = styled(Container)`
@@ -16,62 +31,128 @@ const CenteredContainer = styled(Container)`
   width: 25rem;
 `
 
-const LoginForm: React.FC = () => {
+function LoginForm() {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const {
+    status: newsStatus,
+    newsItems,
+    error: newsErrorMsg,
+  } = useAppSelector((store) => store.news)
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm<LoginFormInput>()
 
-  const onSubmit: SubmitHandler<LoginFormInput> = (data) => {
-    console.log(data)
+  const isLoading = newsStatus === "loading"
+  const isError = newsStatus === "error"
+
+  useEffect(
+    function () {
+      if (!isLoading && newsItems.length > 0) {
+        dispatch(setIsAuthenticated())
+        navigate("/storyList")
+      }
+    },
+    [dispatch, newsItems, navigate, isLoading]
+  )
+
+  function onSubmit({ apiKey, email }: LoginFormInput): void {
+    dispatch(fetchNews())
+    console.log(apiKey, email)
+  }
+
+  function handleRegister() {
+    window.open("https://newsapi.org/register", "_blank", "noopener noreferrer")
   }
 
   return (
-    <CenteredContainer>
-      <Paper
-        elevation={3}
-        style={{
-          padding: "20px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h5">Login</Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField
-            label="Username"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            autoFocus
-            {...register("username", { required: "Username is required" })}
-            error={!!errors.username}
-            helperText={errors.username?.message}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            {...register("password", { required: "Password is required" })}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            style={{ marginTop: "15px" }}
-          >
-            Login
-          </Button>
-        </form>
-      </Paper>
-    </CenteredContainer>
+    <>
+      {isError && (
+        <Toast
+          message={newsErrorMsg || "Error getting the news."}
+          type="error"
+        />
+      )}
+      <CenteredContainer>
+        <Paper
+          elevation={3}
+          style={{
+            padding: "20px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h5">Login</Typography>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              label="Email"
+              variant="outlined"
+              margin="normal"
+              value="d@test.test"
+              fullWidth
+              autoFocus
+              {...register("email", {
+                required: "Email address is required",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "Entered value does not match email format",
+                },
+              })}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+            <TextField
+              label="API key"
+              type="password"
+              value="test123"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              {...register("apiKey", { required: "API key is required" })}
+              error={!!errors.apiKey}
+              helperText={errors.apiKey?.message}
+            />
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  loading={isLoading}
+                  style={{ marginTop: "15px" }}
+                >
+                  Login
+                </LoadingButton>
+              </Grid>
+              <Grid item xs={6}>
+                <Tooltip title="In order to obtain the API key for logging in you need to register on the external News API site.">
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    disabled={isLoading}
+                    style={{
+                      marginTop: "15px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={handleRegister}
+                  >
+                    Register{" "}
+                    <ExitToAppIcon sx={{ ml: 0.5, width: 20, height: 20 }} />
+                  </Button>
+                </Tooltip>
+              </Grid>
+            </Grid>
+          </form>
+        </Paper>
+      </CenteredContainer>
+    </>
   )
 }
 
