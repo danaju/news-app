@@ -12,11 +12,11 @@ import {
   Grid,
 } from "@mui/material"
 import { styled } from "@mui/system"
-import { useAppDispatch, useAppSelector } from "../hooks"
+import { useAppDispatch, useAppSelector } from "../../hooks"
 import { useNavigate } from "react-router-dom"
-import { fetchNews } from "../features/news/newsSlice"
-import { setIsAuthenticated } from "../features/user/userSlice"
-import Toast from "./Toast"
+import { fetchNews } from "../news/newsSlice"
+import { setIsAuthenticated } from "./userSlice"
+import Toast from "../../ui/Toast"
 
 interface LoginFormInput {
   email: string

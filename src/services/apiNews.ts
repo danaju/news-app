@@ -4,7 +4,7 @@ export async function getTopNews() {
   const res = await fetch(`${API_URL}/top-headlines?country=us`, {
     method: "GET",
     headers: {
-      Authorization: "40806accd2f741779294b5d2722cab6e",
+      Authorization: "",
     },
     // body: JSON.stringify({ country: "us" }),
   })

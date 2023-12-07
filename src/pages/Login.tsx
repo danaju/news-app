@@ -1,4 +1,4 @@
-import LoginForm from "../ui/LoginForm"
+import LoginForm from "../features/user/LoginForm"
 
 function Login() {
   return <LoginForm />

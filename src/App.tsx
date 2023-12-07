@@ -3,7 +3,7 @@ import StoryList from "./pages/StoryList"
 import Login from "./pages/Login"
 import PageNotFound from "./pages/PageNotFound"
 import ProtectedRoute from "./ui/ProtectedRoute"
-import { Outlet } from "react-router-dom"
+import AppLayout from "./ui/AppLayout"
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-              <Outlet />
+              <AppLayout />
             </ProtectedRoute>
           }
         >
