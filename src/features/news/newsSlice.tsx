@@ -5,7 +5,7 @@ import { getTopNews } from "../../services/apiNews"
 interface NewsState {
   status: string
   error?: string
-  newsItems: string[]
+  newsItems: NewsItem[]
 }
 
 export const fetchNews = createAsyncThunk(

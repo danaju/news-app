@@ -7,9 +7,9 @@ function AppLayout() {
   return (
     <>
       <CssBaseline />
-      <Container disableGutters={true}>
-        <Header />
-          <Outlet />
+      <Header />
+      <Container disableGutters={false} sx={{ overflow: "hidden", mt: "8rem" }}>
+        <Outlet />
       </Container>
     </>
   )

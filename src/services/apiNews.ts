@@ -8,9 +8,8 @@ export async function getTopNews() {
     },
     // body: JSON.stringify({ country: "us" }),
   })
-  console.log(res)
   if (res.status === 401)
-    throw new Error("Authentication failed. Check your API key.")
+    throw new Error("Authentication failed. Please enter a correct API key.")
   if (!res.ok) throw new Error("Error getting the news.")
 
   const { articles } = await res.json()

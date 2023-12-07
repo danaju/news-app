@@ -1,33 +1,39 @@
 import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
 import CardMedia from "@mui/material/CardMedia"
-import Typography from "@mui/material/Typography"
-import { CardActionArea } from "@mui/material"
+import { Grid } from "@mui/material"
+import NewsCardContent from "./NewsCardContent"
 
-export default function NewsCard() {
+type NewsCardProps = {
+  newsItem: NewsItem
+}
+
+export default function NewsCard({ newsItem }: NewsCardProps) {
+  const {
+    source: { name: sourceName },
+    urlToImage,
+    title,
+    url,
+  } = newsItem
+
+  function handleOpenSource() {
+    window.open(url, "_blank", "noopener noreferrer")
+  }
+
   return (
-    <Card style={{ height: "100%" }}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image="/contemplative-reptile.jpg"
-          alt="green iguana"
-        />
-        <CardContent style={{ overflow: "hidden" }}>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            style={{ overflow: "hidden", textOverflow: "ellipsis" }}
-          >
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+    <Card onClick={handleOpenSource} sx={{ ":hover": { cursor: "pointer" } }}>
+      <Grid container>
+        <Grid item xs={12}>
+          <CardMedia
+            component="img"
+            height="140"
+            image={urlToImage || "/contemplative-reptile.jpg"}
+            alt={sourceName}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <NewsCardContent title={title} source={sourceName} />
+        </Grid>
+      </Grid>
     </Card>
   )
 }
