@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks"
 import { useNavigate } from "react-router-dom"
 import { fetchNews } from "../news/newsSlice"
 import Toast from "../../ui/Toast"
-import { setIsAuthenticated } from "./userSlice"
+import { login } from "./userSlice"
 
 interface LoginFormInput {
   email: string
@@ -34,10 +34,9 @@ const CenteredContainer = styled(Container)`
 function LoginForm() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const {
-    status: newsStatus,
-    error: newsErrorMsg,
-  } = useAppSelector((store) => store.news)
+  const { status: newsStatus, error: newsErrorMsg } = useAppSelector(
+    (store) => store.news
+  )
   const { isAuthenticated } = useAppSelector((store) => store.user)
   const {
     handleSubmit,
@@ -60,7 +59,7 @@ function LoginForm() {
   function onSubmit({ apiKey, email }: LoginFormInput): void {
     dispatch(fetchNews()).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        dispatch(setIsAuthenticated(true))
+        dispatch(login({ apiKey, email }))
       }
     })
     console.log(apiKey, email)
