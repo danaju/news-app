@@ -15,8 +15,8 @@ import { styled } from "@mui/system"
 import { useAppDispatch, useAppSelector } from "../../hooks"
 import { useNavigate } from "react-router-dom"
 import { fetchNews } from "../news/newsSlice"
-import { setIsAuthenticated } from "./userSlice"
 import Toast from "../../ui/Toast"
+import { setIsAuthenticated } from "./userSlice"
 
 interface LoginFormInput {
   email: string
@@ -36,9 +36,9 @@ function LoginForm() {
   const navigate = useNavigate()
   const {
     status: newsStatus,
-    newsItems,
     error: newsErrorMsg,
   } = useAppSelector((store) => store.news)
+  const { isAuthenticated } = useAppSelector((store) => store.user)
   const {
     handleSubmit,
     register,
@@ -50,16 +50,19 @@ function LoginForm() {
 
   useEffect(
     function () {
-      if (!isLoading && newsItems.length > 0) {
-        dispatch(setIsAuthenticated())
+      if (!isLoading && !isError && isAuthenticated) {
         navigate("/storyList")
       }
     },
-    [dispatch, newsItems, navigate, isLoading]
+    [dispatch, navigate, isLoading, isError, isAuthenticated]
   )
 
   function onSubmit({ apiKey, email }: LoginFormInput): void {
-    dispatch(fetchNews())
+    dispatch(fetchNews()).then((action) => {
+      if (action.meta.requestStatus === "fulfilled") {
+        dispatch(setIsAuthenticated(true))
+      }
+    })
     console.log(apiKey, email)
   }
 
