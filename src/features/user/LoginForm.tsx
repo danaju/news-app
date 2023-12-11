@@ -57,12 +57,13 @@ function LoginForm() {
   )
 
   function onSubmit({ apiKey, email }: LoginFormInput): void {
+    localStorage.setItem("apiKey", apiKey)
+    localStorage.setItem("email", email)
     dispatch(fetchNews()).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         dispatch(login({ apiKey, email }))
       }
     })
-    console.log(apiKey, email)
   }
 
   function handleRegister() {
@@ -109,7 +110,6 @@ function LoginForm() {
             <TextField
               label="API key"
               type="password"
-              value="test123"
               variant="outlined"
               margin="normal"
               fullWidth

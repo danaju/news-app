@@ -18,7 +18,7 @@ export async function getTopHeadlines(params?: GetTopHeadlinesParams) {
   const res = await fetch(`${API_URL}/top-headlines?${queryParams}`, {
     method: "GET",
     headers: {
-      Authorization: "",
+      Authorization: localStorage.getItem("apiKey") || "",
     },
   })
   if (res.status === 401)
