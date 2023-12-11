@@ -1,7 +1,5 @@
 import LoginForm from "../features/user/LoginForm"
 
-function Login() {
+export default function Login() {
   return <LoginForm />
 }
-
-export default Login

@@ -1,7 +1,7 @@
-import * as React from "react"
+import MuiAlert, { AlertProps } from "@mui/material/Alert"
+import React from "react"
 import Stack from "@mui/material/Stack"
 import Snackbar from "@mui/material/Snackbar"
-import MuiAlert, { AlertProps } from "@mui/material/Alert"
 
 interface CustomSnackbarProps {
   type: "success" | "error" | "warning" | "info"

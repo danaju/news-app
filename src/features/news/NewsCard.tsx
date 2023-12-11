@@ -1,6 +1,6 @@
+import { Grid } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardMedia from "@mui/material/CardMedia"
-import { Grid } from "@mui/material"
 import NewsCardContent from "./NewsCardContent"
 
 type NewsCardProps = {

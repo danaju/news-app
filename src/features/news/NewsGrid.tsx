@@ -1,13 +1,33 @@
+import { useAppDispatch, useAppSelector } from "../../hooks"
+import { useEffect } from "react"
+import { useSearchParams } from "react-router-dom"
+import { fetchNews } from "./newsSlice"
 import Grid from "@mui/material/Grid"
-import { useAppSelector } from "../../hooks"
 import NewsCard from "./NewsCard"
+import Spinner from "../../ui/Spinner"
 
 export default function NewsGrid() {
-  const { newsItems } = useAppSelector((selector) => selector.news)
-  const news = newsItems.filter((n) => n.title !== "[Removed]")
+  const dispatch = useAppDispatch()
+  const { newsItems, status } = useAppSelector((selector) => selector.news)
+  const [searchParams] = useSearchParams()
+
+  const category = searchParams.get("category")
+  const isLoading = status === "loading"
+  const newsArr = newsItems.filter((n) => n.title !== "[Removed]")
+
+  useEffect(
+    function () {
+      if (category) dispatch(fetchNews({ category }))
+      else dispatch(fetchNews())
+    },
+    [searchParams, category, dispatch]
+  )
+
+  if (isLoading) return <Spinner />
+
   return (
     <Grid container spacing={3}>
-      {news.map((newsItem) => (
+      {newsArr.map((newsItem) => (
         <Grid
           item
           key={newsItem.title}

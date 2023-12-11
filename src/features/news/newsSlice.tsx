@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { getTopHeadlines } from "../../services/apiNews"
 import GetTopHeadlinesParams from "../../services/apiNews"
@@ -11,7 +10,7 @@ interface NewsState {
 
 export const fetchNews = createAsyncThunk(
   "user/fetchNews",
-  async (params: GetTopHeadlinesParams, { rejectWithValue }) => {
+  async (params: GetTopHeadlinesParams | undefined, { rejectWithValue }) => {
     try {
       return await getTopHeadlines(params)
     } catch (e) {

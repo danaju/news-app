@@ -1,7 +1,5 @@
 import NewsGrid from "../features/news/NewsGrid"
 
-function StoryList() {
+export default function StoryList() {
   return <NewsGrid />
 }
-
-export default StoryList
