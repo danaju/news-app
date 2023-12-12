@@ -53,7 +53,7 @@ function LoginForm() {
         navigate("/storyList")
       }
     },
-    [dispatch, navigate, isLoading, isError, isAuthenticated]
+    [navigate, isLoading, isError, isAuthenticated]
   )
 
   function onSubmit({ apiKey, email }: LoginFormInput): void {
@@ -109,6 +109,7 @@ function LoginForm() {
             />
             <TextField
               label="API key"
+              value=""
               type="password"
               variant="outlined"
               margin="normal"

@@ -9,7 +9,7 @@ interface NewsState {
 }
 
 export const fetchNews = createAsyncThunk(
-  "user/fetchNews",
+  "news/fetchNews",
   async (params: GetTopHeadlinesParams | undefined, { rejectWithValue }) => {
     try {
       return await getTopHeadlines(params)

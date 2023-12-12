@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom"
 import { Box, Button, IconButton, Menu, Typography } from "@mui/material"
 import MenuItem from "@mui/material/MenuItem"
 import MenuIcon from "@mui/icons-material/Menu"
+import Divider from "@mui/material/Divider"
 
 interface HeaderMenuProps {
   categories: { label: string; value: string }[]
@@ -30,15 +31,26 @@ export default function HeaderMenu({ categories }: HeaderMenuProps) {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-        {categories.map((item) => (
-          <Button
-            key={item.value}
-            onClick={() => handleSelectCategory(item.value)}
-            sx={{ my: 2, color: "white", display: "block" }}
-          >
-            {item.label}
-          </Button>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: { xs: "none", md: "flex" },
+          justifyContent: "center",
+        }}
+      >
+        {categories.map((item, index) => (
+          <>
+            {index !== 0 && (
+              <Divider orientation="vertical" variant="middle" flexItem />
+            )}
+            <Button
+              key={item.value}
+              onClick={() => handleSelectCategory(item.value)}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              {item.label}
+            </Button>
+          </>
         ))}
       </Box>
 
