@@ -1,6 +1,7 @@
 export default interface GetTopHeadlinesParams {
-  category?: string
+  category?: string | null
   country?: string
+  page?: number
 }
 
 const API_URL = "https://newsapi.org/v2"
@@ -8,11 +9,15 @@ const API_URL = "https://newsapi.org/v2"
 export async function getTopHeadlines(params?: GetTopHeadlinesParams) {
   const country = params?.country ?? "us"
   const category = params?.category
+  const page = params?.page
 
   const queryParams = new URLSearchParams({ country })
 
   if (category) {
     queryParams.append("category", category)
+  }
+  if (page) {
+    queryParams.append("page", page)
   }
 
   const res = await fetch(`${API_URL}/top-headlines?${queryParams}`, {

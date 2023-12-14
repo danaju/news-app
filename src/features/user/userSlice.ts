@@ -25,6 +25,8 @@ const userSlice = createSlice({
       state.email = ""
       state.apiKey = ""
       state.isAuthenticated = false
+      localStorage.removeItem("apiKey")
+      localStorage.removeItem("email")
     },
   },
 })

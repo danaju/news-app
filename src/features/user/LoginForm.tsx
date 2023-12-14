@@ -34,9 +34,7 @@ const CenteredContainer = styled(Container)`
 function LoginForm() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { status: newsStatus, error: newsErrorMsg } = useAppSelector(
-    (store) => store.news
-  )
+  const { status, error } = useAppSelector((store) => store.news)
   const { isAuthenticated } = useAppSelector((store) => store.user)
   const {
     handleSubmit,
@@ -44,8 +42,8 @@ function LoginForm() {
     formState: { errors },
   } = useForm<LoginFormInput>()
 
-  const isLoading = newsStatus === "loading"
-  const isError = newsStatus === "error"
+  const isLoading = status === "loading"
+  const isError = error !== ""
 
   useEffect(
     function () {
@@ -73,10 +71,7 @@ function LoginForm() {
   return (
     <>
       {isError && (
-        <Toast
-          message={newsErrorMsg || "Error getting the news."}
-          type="error"
-        />
+        <Toast message={error || "Error getting the news."} type="error" />
       )}
       <CenteredContainer>
         <Paper
@@ -109,7 +104,6 @@ function LoginForm() {
             />
             <TextField
               label="API key"
-              value=""
               type="password"
               variant="outlined"
               margin="normal"

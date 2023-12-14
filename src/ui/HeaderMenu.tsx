@@ -4,12 +4,15 @@ import { Box, Button, IconButton, Menu, Typography } from "@mui/material"
 import MenuItem from "@mui/material/MenuItem"
 import MenuIcon from "@mui/icons-material/Menu"
 import Divider from "@mui/material/Divider"
+import { useAppDispatch } from "../hooks"
+import {switchCategory } from "../features/news/newsSlice"
 
 interface HeaderMenuProps {
   categories: { label: string; value: string }[]
 }
 
 export default function HeaderMenu({ categories }: HeaderMenuProps) {
+  const dispatch = useAppDispatch()
   const [searchParams, setSearchParams] = useSearchParams()
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
 
@@ -23,10 +26,12 @@ export default function HeaderMenu({ categories }: HeaderMenuProps) {
 
   function handleSelectCategory(category: string) {
     setAnchorElNav(null)
+    if (searchParams.get("category") === category) return
     category === ""
       ? searchParams.delete("category")
       : searchParams.set("category", category)
     setSearchParams(searchParams)
+    dispatch(switchCategory(category))
   }
 
   return (
