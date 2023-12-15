@@ -38,16 +38,9 @@ export default function NewsGrid() {
 
   return (
     <>
-      <Grid container spacing={3} sx={{ mb: "5rem" }}>
+      <Grid container spacing={3}>
         {newsArr.map((newsItem) => (
-          <Grid
-            item
-            key={newsItem.title + Math.random()}
-            xs={6}
-            sm={4}
-            md={3}
-            sx={{ height: "100%" }}
-          >
+          <Grid item key={newsItem.title} xs={6} sm={4} md={3}>
             <NewsCard newsItem={newsItem} />
           </Grid>
         ))}

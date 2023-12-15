@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material"
+import { styled } from "@mui/material"
 import CardContent from "@mui/material/CardContent"
 import Typography from "@mui/material/Typography"
 
@@ -7,53 +7,36 @@ type NewsCardContentProps = {
   source: string
 }
 
+const Content = styled(CardContent)`
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
+
+const Title = styled(Typography)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-weight: bold;
+`
+
+const Source = styled(Typography)`
+  font-size: 0.6rem;
+`
+
 export default function NewsCardContent({
   title,
   source,
 }: NewsCardContentProps) {
   return (
-    <CardContent
-      sx={{
-        height: "8rem",
-      }}
-    >
-      <Grid container>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            lineHeight: "1.2em",
-            minHeight: "2.4em",
-            maxHeight: "2.4em",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          <Typography variant="body2" fontWeight="bold" component="div">
-            {title}
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            mt: "2.6rem",
-          }}
-        >
-          <Typography
-            variant="overline"
-            component="div"
-            color="text.secondary"
-            sx={{
-              fontSize: "0.6rem",
-            }}
-          >
-            Source: {source}
-          </Typography>
-        </Grid>
-      </Grid>
-    </CardContent>
+    <Content>
+      <Title variant="body2">{title}</Title>
+      <Source variant="overline" color="text.secondary">
+        Source: {source}
+      </Source>
+    </Content>
   )
 }
