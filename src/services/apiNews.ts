@@ -17,7 +17,7 @@ export async function getTopHeadlines(params?: GetTopHeadlinesParams) {
     queryParams.append("category", category)
   }
   if (page) {
-    queryParams.append("page", page)
+    queryParams.append("page", page.toString())
   }
 
   const res = await fetch(`${API_URL}/top-headlines?${queryParams}`, {
@@ -31,6 +31,6 @@ export async function getTopHeadlines(params?: GetTopHeadlinesParams) {
   if (!res.ok)
     throw new Error(`Error getting the news. (Error code: ${res.status})`)
 
-  const { articles } = await res.json()
-  return articles
+  const { articles, totalResults } = await res.json()
+  return { articles, totalResults }
 }

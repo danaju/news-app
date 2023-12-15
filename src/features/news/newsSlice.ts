@@ -8,6 +8,7 @@ interface NewsState {
   newsItems: NewsItem[]
   currentPage: number
   category: string
+  hasMoreItems: boolean
 }
 
 export const fetchNews = createAsyncThunk(
@@ -35,6 +36,7 @@ const initialState: NewsState = {
   newsItems: [],
   currentPage: 1,
   category: "",
+  hasMoreItems: true,
 }
 
 const newsSlice = createSlice({
@@ -45,6 +47,7 @@ const newsSlice = createSlice({
       state.newsItems = []
       state.currentPage = 1
       state.category = action.payload
+      state.hasMoreItems = true
     },
     incrementPage: (state) => {
       state.currentPage += 1
@@ -56,9 +59,11 @@ const newsSlice = createSlice({
         state.status = "loading"
       })
       .addCase(fetchNews.fulfilled, (state, action) => {
+        const { articles, totalResults } = action.payload!
         state.status = "idle"
-        state.newsItems = [...state.newsItems, ...action.payload]
+        state.newsItems = [...state.newsItems, ...articles]
         state.error = ""
+        if (totalResults <= state.newsItems.length) state.hasMoreItems = false
       })
       .addCase(fetchNews.rejected, (state, action) => {
         state.status = "error"

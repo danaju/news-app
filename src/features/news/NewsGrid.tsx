@@ -7,35 +7,38 @@ import { fetchNews, incrementPage } from "./newsSlice"
 
 export default function NewsGrid() {
   const dispatch = useAppDispatch()
-  const { newsItems, status, currentPage, category } = useAppSelector(
-    (selector) => selector.news
-  )
+  const { newsItems, status, currentPage, category, hasMoreItems } =
+    useAppSelector((selector) => selector.news)
 
   const isLoading = status === "loading"
   const newsArr = newsItems.filter((n) => n.title !== "[Removed]")
 
   useEffect(() => {
     dispatch(fetchNews())
-  }, [category, currentPage, dispatch])
+  }, [category, dispatch])
 
   useEffect(() => {
     function handleScroll() {
       if (
         window.innerHeight + document.documentElement.scrollTop !==
           document.documentElement.offsetHeight ||
-        isLoading
+        isLoading ||
+        !hasMoreItems
       ) {
         return
       }
+      console.log("scroll action")
+      console.log(hasMoreItems)
       dispatch(incrementPage())
+      dispatch(fetchNews())
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [isLoading, dispatch, currentPage])
+  }, [isLoading, dispatch, currentPage, hasMoreItems])
 
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ mb: "5rem" }}>
         {newsArr.map((newsItem) => (
           <Grid
             item
