@@ -1,11 +1,10 @@
 import { useState } from "react"
-import { useSearchParams } from "react-router-dom"
-import { Box, Button, IconButton, Menu, Typography } from "@mui/material"
-import MenuItem from "@mui/material/MenuItem"
-import MenuIcon from "@mui/icons-material/Menu"
-import Divider from "@mui/material/Divider"
+import { useNavigate } from "react-router-dom"
+import { Box, IconButton, Menu, Typography } from "@mui/material"
 import { useAppDispatch } from "../hooks"
 import { switchCategory } from "../features/news/newsSlice"
+import MenuItem from "@mui/material/MenuItem"
+import MenuIcon from "@mui/icons-material/Menu"
 
 interface HeaderMenuProps {
   categories: { label: string; value: string }[]
@@ -13,8 +12,8 @@ interface HeaderMenuProps {
 
 export default function HeaderMenu({ categories }: HeaderMenuProps) {
   const dispatch = useAppDispatch()
-  const [searchParams, setSearchParams] = useSearchParams()
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
+  const navigate = useNavigate()
 
   function handleOpenNavMenu(event: React.MouseEvent<HTMLElement>) {
     setAnchorElNav(event.currentTarget)
@@ -26,12 +25,8 @@ export default function HeaderMenu({ categories }: HeaderMenuProps) {
 
   function handleSelectCategory(category: string) {
     setAnchorElNav(null)
-    if (searchParams.get("category") === category) return
-    category === ""
-      ? searchParams.delete("category")
-      : searchParams.set("category", category)
-    setSearchParams(searchParams)
-    dispatch(switchCategory(category))
+    dispatch(switchCategory())
+    navigate(`/storylist/${category}`)
   }
 
   return (
@@ -40,22 +35,15 @@ export default function HeaderMenu({ categories }: HeaderMenuProps) {
         sx={{
           flexGrow: 1,
           display: { xs: "none", md: "flex" },
-          justifyContent: "center",
         }}
       >
-        {categories.map((item, index) => (
-          <>
-            {index !== 0 && (
-              <Divider orientation="vertical" variant="middle" flexItem />
-            )}
-            <Button
-              key={item.value}
-              onClick={() => handleSelectCategory(item.value)}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              {item.label}
-            </Button>
-          </>
+        {categories.map((item) => (
+          <MenuItem
+            key={item.value}
+            onClick={() => handleSelectCategory(item.value)}
+          >
+            <Typography textAlign="center">{item.label}</Typography>
+          </MenuItem>
         ))}
       </Box>
 
@@ -77,9 +65,6 @@ export default function HeaderMenu({ categories }: HeaderMenuProps) {
           }}
           open={Boolean(anchorElNav)}
           onClose={handleCloseNavMenu}
-          sx={{
-            display: { xs: "block", md: "none" },
-          }}
         >
           {categories.map((item) => (
             <MenuItem

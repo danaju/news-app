@@ -16,11 +16,12 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Navigate replace to="storylist" />} />
-          <Route path="storylist" element={<StoryList />} />
+          <Route index element={<Navigate replace to="/storylist" />} />
+          <Route path="/storylist" element={<StoryList />} />
+          <Route path="/storylist/:category" element={<StoryList />} />
         </Route>
 
-        <Route path="login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>

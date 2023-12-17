@@ -22,18 +22,31 @@ interface LoginFormInput {
   apiKey: string
 }
 
-const CenteredContainer = styled(Container)`
+const StyledContainer = styled(Container)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   width: 25rem;
+`
+
+const StyledPaper = styled(Paper)`
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
 `
 
 function LoginForm() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { isAuthenticated, isLoading, error } = useAppSelector((store) => store.user)
+  const { isAuthenticated, isLoading, error } = useAppSelector(
+    (store) => store.user
+  )
   const {
     handleSubmit,
     register,
@@ -64,23 +77,15 @@ function LoginForm() {
       {error && (
         <Toast message={error || "Error getting the news."} type="error" />
       )}
-      <CenteredContainer>
-        <Paper
-          elevation={3}
-          style={{
-            padding: "20px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h5">Login</Typography>
+      <StyledContainer>
+        <StyledPaper elevation={3}>
+          <Typography variant="h6">Login</Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               label="Email"
               variant="outlined"
               margin="normal"
-              value="d@test.test"
+              defaultValue="d@test.test"
               fullWidth
               autoFocus
               {...register("email", {
@@ -98,7 +103,6 @@ function LoginForm() {
               type="password"
               variant="outlined"
               margin="normal"
-              value=""
               fullWidth
               {...register("apiKey", { required: "API key is required" })}
               error={!!errors.apiKey}
@@ -112,7 +116,6 @@ function LoginForm() {
                   color="primary"
                   fullWidth
                   loading={isLoading}
-                  style={{ marginTop: "15px" }}
                 >
                   Login
                 </LoadingButton>
@@ -125,22 +128,17 @@ function LoginForm() {
                     color="primary"
                     fullWidth
                     disabled={isLoading}
-                    style={{
-                      marginTop: "15px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
                     onClick={handleRegister}
                   >
-                    Register{" "}
-                    <ExitToAppIcon sx={{ ml: 0.5, width: 20, height: 20 }} />
+                    Register
+                    <ExitToAppIcon fontSize="inherit" />
                   </Button>
                 </Tooltip>
               </Grid>
             </Grid>
           </form>
-        </Paper>
-      </CenteredContainer>
+        </StyledPaper>
+      </StyledContainer>
     </>
   )
 }

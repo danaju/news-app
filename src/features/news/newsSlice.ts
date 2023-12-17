@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { getTopHeadlines } from "../../services/apiNews"
 
@@ -11,14 +10,28 @@ interface NewsState {
   hasMoreItems: boolean
 }
 
+interface FetchNewsArgs {
+  category?: string
+  mutateNewsItems?: boolean
+}
+
+const initialState: NewsState = {
+  status: "idle",
+  error: "",
+  newsItems: [],
+  currentPage: 1,
+  category: "",
+  hasMoreItems: false,
+}
+
 export const fetchNews = createAsyncThunk(
   "news/fetchNews",
-  async (_, { rejectWithValue, getState }) => {
+  async (args: FetchNewsArgs | undefined, { rejectWithValue, getState }) => {
     try {
-      const { news } = getState()
+      const { news } = getState() as { news: NewsState }
       return await getTopHeadlines({
         page: news.currentPage,
-        category: news.category,
+        category: args?.category,
       })
     } catch (e) {
       if (typeof e === "string") {
@@ -30,24 +43,14 @@ export const fetchNews = createAsyncThunk(
   }
 )
 
-const initialState: NewsState = {
-  status: "idle",
-  error: "",
-  newsItems: [],
-  currentPage: 1,
-  category: "",
-  hasMoreItems: true,
-}
-
 const newsSlice = createSlice({
   name: "news",
   initialState,
   reducers: {
-    switchCategory: (state, action) => {
+    switchCategory: (state) => {
       state.newsItems = []
       state.currentPage = 1
-      state.category = action.payload
-      state.hasMoreItems = true
+      state.hasMoreItems = false
     },
     incrementPage: (state) => {
       state.currentPage += 1
@@ -59,11 +62,16 @@ const newsSlice = createSlice({
         state.status = "loading"
       })
       .addCase(fetchNews.fulfilled, (state, action) => {
+        const mutate = action.meta.arg?.mutateNewsItems
         const { articles, totalResults } = action.payload!
         state.status = "idle"
-        state.newsItems = [...state.newsItems, ...articles]
+        mutate
+          ? (state.newsItems = [...state.newsItems, ...articles])
+          : (state.newsItems = articles)
         state.error = ""
-        if (totalResults <= state.newsItems.length) state.hasMoreItems = false
+        totalResults <= state.newsItems.length
+          ? (state.hasMoreItems = false)
+          : (state.hasMoreItems = true)
       })
       .addCase(fetchNews.rejected, (state, action) => {
         state.status = "error"
@@ -72,5 +80,4 @@ const newsSlice = createSlice({
 })
 
 export const { switchCategory, incrementPage } = newsSlice.actions
-
 export default newsSlice.reducer

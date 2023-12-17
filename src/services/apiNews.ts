@@ -1,5 +1,5 @@
 export default interface GetTopHeadlinesParams {
-  category?: string | null
+  category?: string
   country?: string
   page?: number
 }
@@ -7,7 +7,7 @@ export default interface GetTopHeadlinesParams {
 const API_URL = "https://newsapi.org/v2"
 
 export async function getTopHeadlines(params?: GetTopHeadlinesParams) {
-  const country = params?.country ?? "us"
+  const country = "us"
   const category = params?.category
   const page = params?.page
 

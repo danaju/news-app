@@ -7,24 +7,28 @@ type NewsCardContentProps = {
   source: string
 }
 
-const Content = styled(CardContent)`
+const StyledCardContent = styled(CardContent)`
   height: 8rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  &:last-child {
+    padding-bottom: 6px;
+  }
 `
 
-const Title = styled(Typography)`
+const StyledTitle = styled(Typography)`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   font-weight: bold;
 `
 
-const Source = styled(Typography)`
+const StyledSource = styled(Typography)`
   font-size: 0.6rem;
+  line-height: 1.5;
 `
 
 export default function NewsCardContent({
@@ -32,11 +36,11 @@ export default function NewsCardContent({
   source,
 }: NewsCardContentProps) {
   return (
-    <Content>
-      <Title variant="body2">{title}</Title>
-      <Source variant="overline" color="text.secondary">
+    <StyledCardContent>
+      <StyledTitle variant="body2">{title}</StyledTitle>
+      <StyledSource variant="overline" color="text.secondary">
         Source: {source}
-      </Source>
-    </Content>
+      </StyledSource>
+    </StyledCardContent>
   )
 }

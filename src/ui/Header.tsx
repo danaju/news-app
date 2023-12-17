@@ -1,9 +1,8 @@
 import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
-import Typography from "@mui/material/Typography"
-// import Container from "@mui/material/Container"
-import LogOutButton from "./LogOutButton"
+import LogOutButton from "../features/user/LogOutButton"
 import HeaderMenu from "./HeaderMenu"
+import HeaderTitle from "./HeaderTitle"
 
 function Header() {
   const categories = [
@@ -19,44 +18,12 @@ function Header() {
 
   return (
     <AppBar position="sticky">
-        <Toolbar > 
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: "700",
-              letterSpacing: ".3rem",
-              color: "inherit",
-            }}
-          >
-            News
-          </Typography>
-
-          <HeaderMenu categories={categories} />
-
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-            }}
-          >
-            News
-          </Typography>
-
-          <LogOutButton />
-        </Toolbar>
+      <Toolbar>
+        <HeaderTitle display={{ xs: "none", md: "flex" }} />
+        <HeaderMenu categories={categories} />
+        <HeaderTitle display={{ xs: "flex", md: "none" }} />
+        <LogOutButton />
+      </Toolbar>
     </AppBar>
   )
 }

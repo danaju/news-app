@@ -4,20 +4,26 @@ import Grid from "@mui/material/Grid"
 import NewsCard from "./NewsCard"
 import Spinner from "../../ui/Spinner"
 import { fetchNews, incrementPage } from "./newsSlice"
-import { useSearchParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import { Container, styled } from "@mui/material"
+
+const StyledContainer = styled(Container)`
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+`
 
 export default function NewsGrid() {
   const dispatch = useAppDispatch()
-  const { newsItems, status, currentPage, hasMoreItems, category } =
-    useAppSelector((selector) => selector.news)
-  const [searchParams] = useSearchParams()
-
+  const { newsItems, status, hasMoreItems } = useAppSelector(
+    (selector) => selector.news
+  )
+  const { category } = useParams()
   const isLoading = status === "loading"
   const newsArr = newsItems.filter((n) => n.title !== "[Removed]")
 
   useEffect(() => {
-    dispatch(fetchNews())
-  }, [category, searchParams, dispatch])
+    dispatch(fetchNews({ category }))
+  }, [category, dispatch])
 
   useEffect(() => {
     function handleScroll() {
@@ -29,17 +35,15 @@ export default function NewsGrid() {
       ) {
         return
       }
-      console.log("scroll action")
-      console.log(hasMoreItems)
       dispatch(incrementPage())
-      dispatch(fetchNews())
+      dispatch(fetchNews({ mutateNewsItems: true }))
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [isLoading, dispatch, currentPage, hasMoreItems])
+  }, [isLoading, hasMoreItems, dispatch])
 
   return (
-    <>
+    <StyledContainer>
       <Grid container spacing={3}>
         {newsArr.map((newsItem) => (
           <Grid item key={newsItem.title} xs={6} sm={4} md={3}>
@@ -48,6 +52,6 @@ export default function NewsGrid() {
         ))}
       </Grid>
       {isLoading && <Spinner />}
-    </>
+    </StyledContainer>
   )
 }
