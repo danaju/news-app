@@ -1,8 +1,7 @@
 import { styled } from "@mui/system"
 import { useAppDispatch, useAppSelector } from "../../hooks"
 import { useNavigate } from "react-router-dom"
-import { fetchNews } from "../news/newsSlice"
-import { login } from "./userSlice"
+import { authenticate } from "./userSlice"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import {
@@ -34,34 +33,26 @@ const CenteredContainer = styled(Container)`
 function LoginForm() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { status, error } = useAppSelector((store) => store.news)
-  const { isAuthenticated } = useAppSelector((store) => store.user)
+  const { isAuthenticated, isLoading, error } = useAppSelector((store) => store.user)
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm<LoginFormInput>()
 
-  const isLoading = status === "loading"
-  const isError = error !== ""
-
   useEffect(
     function () {
-      if (!isLoading && !isError && isAuthenticated) {
+      if (!isLoading && !error && isAuthenticated) {
         navigate("/storyList")
       }
     },
-    [navigate, isLoading, isError, isAuthenticated]
+    [navigate, isLoading, error, isAuthenticated]
   )
 
   function onSubmit({ apiKey, email }: LoginFormInput): void {
     localStorage.setItem("apiKey", apiKey)
     localStorage.setItem("email", email)
-    dispatch(fetchNews()).then((action) => {
-      if (action.meta.requestStatus === "fulfilled") {
-        dispatch(login({ apiKey, email }))
-      }
-    })
+    dispatch(authenticate())
   }
 
   function handleRegister() {
@@ -70,7 +61,7 @@ function LoginForm() {
 
   return (
     <>
-      {isError && (
+      {error && (
         <Toast message={error || "Error getting the news."} type="error" />
       )}
       <CenteredContainer>
@@ -107,6 +98,7 @@ function LoginForm() {
               type="password"
               variant="outlined"
               margin="normal"
+              value=""
               fullWidth
               {...register("apiKey", { required: "API key is required" })}
               error={!!errors.apiKey}

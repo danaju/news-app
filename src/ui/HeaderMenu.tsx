@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem"
 import MenuIcon from "@mui/icons-material/Menu"
 import Divider from "@mui/material/Divider"
 import { useAppDispatch } from "../hooks"
-import {switchCategory } from "../features/news/newsSlice"
+import { switchCategory } from "../features/news/newsSlice"
 
 interface HeaderMenuProps {
   categories: { label: string; value: string }[]

@@ -4,18 +4,20 @@ import Grid from "@mui/material/Grid"
 import NewsCard from "./NewsCard"
 import Spinner from "../../ui/Spinner"
 import { fetchNews, incrementPage } from "./newsSlice"
+import { useSearchParams } from "react-router-dom"
 
 export default function NewsGrid() {
   const dispatch = useAppDispatch()
-  const { newsItems, status, currentPage, category, hasMoreItems } =
+  const { newsItems, status, currentPage, hasMoreItems, category } =
     useAppSelector((selector) => selector.news)
+  const [searchParams] = useSearchParams()
 
   const isLoading = status === "loading"
   const newsArr = newsItems.filter((n) => n.title !== "[Removed]")
 
   useEffect(() => {
     dispatch(fetchNews())
-  }, [category, dispatch])
+  }, [category, searchParams, dispatch])
 
   useEffect(() => {
     function handleScroll() {
