@@ -33,7 +33,7 @@ export default function Toast({ type, message }: CustomSnackbarProps) {
         onClose={handleClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={handleClose} severity={type} sx={{ width: "30rem" }}>
+        <Alert onClose={handleClose} severity={type} sx={{ width: "30rem", mt: "3rem" }}>
           {message}
         </Alert>
       </Snackbar>

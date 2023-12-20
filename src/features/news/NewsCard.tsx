@@ -36,7 +36,6 @@ export default function NewsCard({ newsItem }: NewsCardProps) {
             alt={sourceName}
           />
         </Grid>
-
         <Grid item xs={12}>
           <NewsCardContent title={title} source={sourceName} />
         </Grid>

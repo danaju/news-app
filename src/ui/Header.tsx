@@ -18,7 +18,7 @@ function Header() {
 
   return (
     <AppBar position="sticky">
-      <Toolbar>
+      <Toolbar variant="dense">
         <HeaderTitle display={{ xs: "none", md: "flex" }} />
         <HeaderMenu categories={categories} />
         <HeaderTitle display={{ xs: "flex", md: "none" }} />

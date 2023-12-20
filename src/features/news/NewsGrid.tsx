@@ -6,6 +6,8 @@ import Spinner from "../../ui/Spinner"
 import { fetchNews, incrementPage } from "./newsSlice"
 import { useParams } from "react-router-dom"
 import { Container, styled } from "@mui/material"
+import Empty from "../../ui/Empty"
+import Toast from "../../ui/Toast"
 
 const StyledContainer = styled(Container)`
   margin-top: 2rem;
@@ -14,7 +16,7 @@ const StyledContainer = styled(Container)`
 
 export default function NewsGrid() {
   const dispatch = useAppDispatch()
-  const { newsItems, status, hasMoreItems } = useAppSelector(
+  const { newsItems, status, hasMoreItems, error } = useAppSelector(
     (selector) => selector.news
   )
   const { category } = useParams()
@@ -52,6 +54,10 @@ export default function NewsGrid() {
         ))}
       </Grid>
       {isLoading && <Spinner />}
+      {!isLoading && newsArr.length === 0 && <Empty />}
+      {error && (
+        <Toast message={error || "Error getting the news."} type="error" />
+      )}
     </StyledContainer>
   )
 }

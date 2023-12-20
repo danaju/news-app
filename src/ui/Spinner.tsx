@@ -5,7 +5,7 @@ const StyledContainer = styled(Container)`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50vh;
+  height: 50rem;
   width: 25rem;
 `
 
