@@ -32,8 +32,10 @@ export default function LogOutButton() {
 
   return (
     <>
-      <StyledButton onClick={handleLogout}>Log out</StyledButton>
-      <StyledIconButton onClick={handleLogout}>
+      <StyledButton onClick={handleLogout} data-testid="logout-button">
+        Log out
+      </StyledButton>
+      <StyledIconButton onClick={handleLogout} data-testid="logout-icon-button">
         <ExitToAppIcon />
       </StyledIconButton>
     </>
