@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from "@testing-library/react"
-import { Provider } from "react-redux" // Import your Redux provider if needed
+import { Provider } from "react-redux"
 import LogOutButton from "../features/user/LogOutButton"
 import store from "../store"
 
