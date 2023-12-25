@@ -85,7 +85,6 @@ function LoginForm() {
               label="Email"
               variant="outlined"
               margin="normal"
-              defaultValue="d@test.test"
               fullWidth
               autoFocus
               {...register("email", {
