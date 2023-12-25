@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import Grid from "@mui/material/Grid"
 import NewsCard from "./NewsCard"
 import Spinner from "../../ui/Spinner"
-import { fetchNews, incrementPage } from "./newsSlice"
+import { fetchNews, incrementPage, switchCategory } from "./newsSlice"
 import { useParams } from "react-router-dom"
 import { Container, styled } from "@mui/material"
 import Empty from "../../ui/Empty"
@@ -24,6 +24,7 @@ export default function NewsGrid() {
   const newsArr = newsItems.filter((n) => n.title !== "[Removed]")
 
   useEffect(() => {
+    dispatch(switchCategory())
     dispatch(fetchNews({ category }))
   }, [category, dispatch])
 
@@ -38,11 +39,11 @@ export default function NewsGrid() {
         return
       }
       dispatch(incrementPage())
-      dispatch(fetchNews({ mutateNewsItems: true }))
+      dispatch(fetchNews({ category, mutateNewsItems: true }))
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [isLoading, hasMoreItems, dispatch])
+  }, [isLoading, category, hasMoreItems, dispatch])
 
   return (
     <StyledContainer>

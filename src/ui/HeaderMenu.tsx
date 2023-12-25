@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Box, IconButton, Menu, Typography } from "@mui/material"
-import { useAppDispatch, useAppSelector } from "../hooks"
-import { switchCategory } from "../features/news/newsSlice"
+import { useAppSelector } from "../hooks"
+
 import MenuItem from "@mui/material/MenuItem"
 import MenuIcon from "@mui/icons-material/Menu"
 import { styled } from "@mui/system"
@@ -32,9 +32,9 @@ const StyledMenuBoxXs = styled(Box)`
 `
 
 export default function HeaderMenu({ categories }: HeaderMenuProps) {
-  const dispatch = useAppDispatch()
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
+  const { category } = useParams()
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const { status } = useAppSelector((store) => store.news)
   const isLoading = status === "loading"
 
@@ -46,10 +46,10 @@ export default function HeaderMenu({ categories }: HeaderMenuProps) {
     setAnchorElNav(null)
   }
 
-  function handleSelectCategory(category: string) {
+  function handleSelectCategory(newCategory: string) {
+    if (newCategory === category) return
     setAnchorElNav(null)
-    dispatch(switchCategory())
-    navigate(`/storylist/${category}`)
+    navigate(`/storylist/${newCategory}`)
   }
 
   return (
